@@ -68,10 +68,6 @@ blockquote > p:first-child:before, blockquote > p:last-child:after {
   padding: 0 -0.2em;
 }
 
-.logo {
-  margin: 1em 0;
-  font-size: 2.7em;
-}
 .logo h1 > a {
   /*color: #BE3F1C;*/
   text-decoration: none;
@@ -103,12 +99,6 @@ article {
   color: #888;
 }
 
-header .links {
-  position: relative;
-  top: -5em;
-  float: right;
-}
-
 footer {
   text-align: center;
   font-size: .8em;
@@ -117,6 +107,22 @@ footer {
 footer .nav {
   font-size: 2em;
   margin-bottom: 2em;
+}
+
+.header {
+  margin: 2em 0;
+}
+  
+@media (min-width: 860px) {
+  header .links {
+    position: relative;
+    top: -5em;
+    float: right;
+  }
+
+  .logo {
+    font-size: 2.7em;
+  }
 }
 
 /*body, a {
