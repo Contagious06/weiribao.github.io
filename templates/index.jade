@@ -1,0 +1,31 @@
+extends layout
+
+block content
+  section.articles
+    //- header 
+      //- h2 Posts
+    each article in articles
+      article.article.intro
+        header
+          a(href=article.url)= article.title
+          span.date= moment.utc(article.date).format('MMMM DD, YYYY')
+        section.content
+          | !{ typogr(article.intro).typogrify() }
+          if article.hasMore
+            p.more
+              a(href=article.url) more »
+  //- section.projects
+  //-   header
+  //-     h2 Projects
+  //-   include projects
+
+block prepend footer
+  div.nav
+    if prevPage
+      a(href=prevPage.url) « Newer
+    else
+      a(href='/archive.html') « Archives
+    if nextPage
+      a(href=nextPage.url) Next page »
+
+

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width">
+    <title>Finding duplicate elements in an array - The Cool Wei
+    </title>
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Akronim" type="text/css">
+    <link rel="alternate" href="http://thecoolwei.com/feed.xml" type="application/rss+xml" title="Coding &amp; Music &amp; Life">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic|Anonymous+Pro:400,700,400italic,700italic|Merriweather:400,700,300">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+  </head>
+  <body class="article-detail">
+    <header class="header">
+      <div class="content-wrap">
+        <h1>Finding duplicate elements in an array</h1>
+      </div>
+    </header>
+    <div id="content">
+      <div class="content-wrap">
+        <article class="article">
+          <section class="content"><blockquote>
+<p>We have an array of length 100, which contains numbers ranging from 0 and 99. There is exactly one duplicate number in this array. Write a program to find out this&nbsp;number.</p>
+</blockquote>
+<p>I was asked this question yesterday during a phone interview. Like almost all phone interview questions, it appears to be simple. But there are actually several interesting <code>O(1)</code> space <code>O(n)</code> time&nbsp;solutions.</p>
+<p><span class="more"></span></p>
+<p><a href="http://aperiodic.net/phil/archives/Geekery/find-duplicate-elements.html">This article</a> addressed this problem thoroughly. I will try to write a brief summary of possible solutions and some javascript code&nbsp;below. </p>
+<h3 id="by-counting">By&nbsp;counting</h3>
+<pre><code class="lang-javascript"><span class="comment">// Find duplicate element by counting</span>
+<span class="comment">// O(n) time, O(n) space</span>
+<span class="function"><span class="keyword">function</span> <span class="title">findDups1</span><span class="params">(input)</span> {</span>
+    <span class="keyword">var</span> count = {};
+    <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>; i &lt; input.length;i++){
+        <span class="keyword">if</span>(count[input[i]]){
+            <span class="keyword">return</span> input[i];
+        } <span class="keyword">else</span> {
+            count[input[i]] = <span class="number">1</span>;
+        }
+    }
+    <span class="keyword">return</span> <span class="string">"Not found."</span>;
+}
+
+console.log(findDups1([<span class="number">0</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">4</span>]));
+<span class="comment">// output: 2</span>
+</code></pre>
+<p>Above solution is simple, but it requires O(n) extra space. We can actually do&nbsp;better.</p>
+<p>Below is <em>a in-place solution</em>  that uses only O(1) space. The idea is to use the input array itself as the counter by mapping element’s value to the array’s index. That is, for a value v, we swap it to index v.  Similar to previous counter-based solution, when we find a collison, the duplicate element is&nbsp;found.</p>
+<pre><code class="lang-javascript"><span class="comment">// find duplicate element by in-place counting</span>
+<span class="comment">// O(n) time, O(1) space</span>
+<span class="function"><span class="keyword">function</span> <span class="title">findDups2</span><span class="params">(input)</span> {</span>
+    <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>;i &lt; input.length;i++){
+        <span class="keyword">while</span>(input[i]!=i){
+            <span class="keyword">if</span>(input[input[i]]==input[i]){
+                <span class="keyword">return</span> input[i];
+            }
+            swap(input, i, input[i]);
+        }
+    }
+}
+
+<span class="function"><span class="keyword">function</span> <span class="title">swap</span><span class="params">(array, i, j)</span>{</span>
+    <span class="keyword">var</span> tmp = array[i];
+    array[i] = array[j];
+    array[j] = tmp;
+}
+
+console.log(findDups2([<span class="number">4</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">0</span>]));
+</code></pre>
+<p>Although <code>findDups2</code> contains two nested loops, its running time is actually O(n). Each element is visited at most three times: once for the iteration(line 3), once for the check(line 5) and once for the swap(line&nbsp;8).</p>
+<h3 id="by-graph-algorithm">By graph&nbsp;algorithm</h3>
+<p>If we modifided the quesiton a little bit, we can have a graph algorithm solution. This solution is O(1) space, O(n) time. Also, it doesn’t modify the input array, which can be useful if the input is immutable. However, it comes with a price: we need to restrict that elements’ values range from 0 to 98 (smaller than the maximum index). The reason for this is we need to use the last element as a starting point. Details is explained&nbsp;below.</p>
+<p>First let’s think of the input array as a directed graph. <code>input[i] = j</code> represents an edge from node i to node j. Then finding the duplicate element is equivalent to finding the beginning of a cycle. To efficiently find the cycle, we need to start from a node that is not in the circle(To be accurate, we need a node in the tail of that circle). That is why we made that restriction - so that no node is pointing to the last node so it is guaranteed a node in the tail. 
+Below I use the well-known <a href="http://en.wikipedia.org/wiki/Floyd%27s_cycle-finding_algorithm#Tortoise_and_hare">Floyd’s cycle finding algorithm</a>.</p>
+<pre><code class="lang-javascript"><span class="comment">// find duplicate element using cycle-finding algorithm</span>
+<span class="comment">// Restriction: all elements in input must be smaller </span>
+<span class="comment">// than input.length - 1</span>
+<span class="function"><span class="keyword">function</span> <span class="title">findDups3</span><span class="params">(input)</span> {</span>
+    <span class="keyword">var</span> fast_runner = input.length - <span class="number">1</span>, 
+        slow_runner = input.length - <span class="number">1</span>;
+    <span class="keyword">do</span> {
+        slow_runner = input[slow_runner];
+        fast_runner = input[input[fast_runner]];
+    } <span class="keyword">while</span>(fast_runner != slow_runner);
+    slow_runner = input.length - <span class="number">1</span>;
+    <span class="keyword">do</span> {
+        slow_runner = input[slow_runner];
+        fast_runner = input[fast_runner];
+    } <span class="keyword">while</span>(fast_runner != slow_runner);
+    console.log(fast_runner);
+}
+findDups3([<span class="number">3</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">0</span>]);
+<span class="comment">// output: 2</span>
+</code></pre>
+<h3 id="by-algebra">By&nbsp;algebra</h3>
+<p>Lastly a special case of this problem: each possible value appears exactly once except the duplicate one(no value is missing). Then we can calculate the duplicate value from the sum of the&nbsp;array.</p>
+<pre><code class="lang-javascript"><span class="comment">// find duplicate element using algebra</span>
+<span class="comment">// Restriction: each possible value appears exactly once </span>
+<span class="comment">// except the duplicate one.</span>
+<span class="function"><span class="keyword">function</span> <span class="title">findDups4</span><span class="params">(input)</span>{</span>
+    <span class="keyword">var</span> sum1 = input.reduce(<span class="function"><span class="keyword">function</span><span class="params">(a,b)</span>{</span>
+        <span class="keyword">return</span> a+b;
+    });
+    <span class="keyword">var</span> m = input.length - <span class="number">2</span>;
+    <span class="keyword">return</span> sum1 - m*(m+<span class="number">1</span>)/<span class="number">2</span>;
+}
+
+console.log(findDups4([<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>]));
+</code></pre>
+</section>
+        </article>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <footer>
+      <div class="content-wrap">
+        <div class="nav"><a href="/">« Home</a></div>
+        <section><span class="copy">&copy; 2012 &mdash; 2014 Ribao Wei. </span><span class="poweredBy"> Powered by&nbsp;<a href="https://github.com/jnordberg/wintersmith">Wintersmith</a> and <a href="http://pages.github.com/">Github Pages</a></span></section>
+      </div>
+    </footer>
+  </body>
+</html>

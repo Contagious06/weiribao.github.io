@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width">
+    <title>Generating all permutations of a string - The Cool Wei
+    </title>
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Akronim" type="text/css">
+    <link rel="alternate" href="http://thecoolwei.com/feed.xml" type="application/rss+xml" title="Coding &amp; Music &amp; Life">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic|Anonymous+Pro:400,700,400italic,700italic|Merriweather:400,700,300">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+  </head>
+  <body class="article-detail">
+    <header class="header">
+      <div class="content-wrap">
+        <h1>Generating all permutations of a string</h1>
+      </div>
+    </header>
+    <div id="content">
+      <div class="content-wrap">
+        <article class="article">
+          <section class="content"><blockquote>
+<p>Given a string, print all its&nbsp;permutations.</p>
+</blockquote>
+<p>There is an elegant in-place recursive solution for this problem. The idea is, for the first position, select one character from the string. Then select another character for the second position from remaining characters. Continue util we have selected a character for every&nbsp;position.</p>
+<p><span class="more"></span></p>
+<p>First let us simplfy the problem a little bit by assuming there is no duplicate charactors in the input&nbsp;string.</p>
+<pre><code class="lang-javascript"><span class="function"><span class="keyword">function</span> <span class="title">permute1</span><span class="params">(input, index)</span>{</span>
+    <span class="comment">// found a permuation</span>
+    <span class="keyword">if</span> (index == input.length) {
+        <span class="keyword">return</span> console.log(input);
+    }
+    <span class="keyword">for</span>(<span class="keyword">var</span> i = index; i &lt; input.length; i++) {
+        swap(input, index, i);
+        permute1(input, index+<span class="number">1</span>);
+        swap(input, index, i);
+        <span class="comment">// input array is restored</span>
+    }
+}
+
+<span class="function"><span class="keyword">function</span> <span class="title">swap</span><span class="params">(array, i, j)</span>{</span>
+    <span class="keyword">var</span> tmp = array[i];
+    array[i] = array[j];
+    array[j] = tmp;
+}
+
+permute1([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>], <span class="number">0</span>);
+</code></pre>
+<p>Notice that the <code>permute</code> function doesn’t change the <code>input</code> array. This can be proved recusively. In the end of the recursive call chain, <code>permute1</code> simply outputs the result, so <code>input</code> is not changed. In each outer call, <code>input</code> is changed in line 7 then restored in line&nbsp;9.</p>
+<p>What if the input string contains duplicate characters? We just need to sort the input then skip duplicate characters during&nbsp;selection.</p>
+<pre><code class="lang-javascript"><span class="function"><span class="keyword">function</span> <span class="title">permute2</span><span class="params">(input)</span> {</span>
+    input.sort();
+
+    <span class="function"><span class="keyword">function</span> <span class="title">permute_recur</span><span class="params">(input, index)</span> {</span>
+        <span class="comment">// found a permutation</span>
+        <span class="keyword">if</span> (index == input.length) {
+            <span class="keyword">return</span> console.log(input);
+        }
+
+        <span class="keyword">for</span>(<span class="keyword">var</span> i = index; i &lt; input.length; i++) {
+            <span class="comment">// skip duplicate elements</span>
+            <span class="keyword">if</span>(i &gt; index &amp;&amp; input[i]===input[i-<span class="number">1</span>]){
+                <span class="keyword">continue</span>;
+            }
+            swap(input, index, i);
+            permute_recur(input, index+<span class="number">1</span>);
+            swap(input, index, i);
+        }
+    }
+
+    <span class="keyword">return</span> permute_recur(input, <span class="number">0</span>);
+
+}
+
+permute2([<span class="number">1</span>,<span class="number">1</span>,<span class="number">2</span>]);
+</code></pre>
+</section>
+        </article>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <footer>
+      <div class="content-wrap">
+        <div class="nav"><a href="/">« Home</a></div>
+        <section><span class="copy">&copy; 2012 &mdash; 2014 Ribao Wei. </span><span class="poweredBy"> Powered by&nbsp;<a href="https://github.com/jnordberg/wintersmith">Wintersmith</a> and <a href="http://pages.github.com/">Github Pages</a></span></section>
+      </div>
+    </footer>
+  </body>
+</html>

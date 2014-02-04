@@ -1,0 +1,28 @@
+{
+  "locals": {
+    "url": "http://thecoolwei.com",
+    "github": "https://github.com/weiribao",
+    "name": "The Cool Wei",
+    "owner": "Ribao Wei",
+    "description": ""
+  },
+  "plugins": [
+    "./plugins/paginator.coffee"
+  ],
+  "require": {
+    "moment": "moment",
+    "_": "underscore",
+    "typogr": "typogr"
+  },
+  "jade": {
+    "pretty": true
+  },
+  "markdown": {
+    "smartLists": true,
+    "smartypants": true
+  },
+  "paginator": {
+    "perPage": 3
+  },
+  "output": "."
+}

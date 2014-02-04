@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>The Cool Wei</title>
+    <atom:link href="http://thecoolwei.com/feed.xml" rel="self" type="application/rss+xml"></atom:link>
+    <link>http://thecoolwei.com</link>
+    <description>Coding &amp; Music &amp; Life</description>
+    <pubDate>Wed, 01 Oct 2014 15:00:00 -0700</pubDate>
+    <generator>Wintersmith - https://github.com/jnordberg/wintersmith</generator>
+    <language>en</language>
+    <item>
+      <title>Finding duplicate elements in an array</title>
+      <link>http://thecoolwei.com/articles/finding-duplicate-elements-in-an-array/</link>
+      <pubDate>Wed, 01 Oct 2014 15:00:00 -0700</pubDate>
+      <guid isPermaLink="true">http://thecoolwei.com/articles/finding-duplicate-elements-in-an-array/</guid>
+      <author></author>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;We have an array of length 100, which contains numbers ranging from 0 and 99. There is exactly one duplicate number in this array. Write a program to find out this number.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;I was asked this question yesterday during a phone interview. Like almost all phone interview questions, it appears to be simple. But there are actually several interesting &lt;code&gt;O(1)&lt;/code&gt; space &lt;code&gt;O(n)&lt;/code&gt; time solutions.&lt;/p&gt;
+&lt;p&gt;&lt;span class=&quot;more&quot;&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://aperiodic.net/phil/archives/Geekery/find-duplicate-elements.html&quot;&gt;This article&lt;/a&gt; addressed this problem thoroughly. I will try to write a brief summary of possible solutions and some javascript code below. &lt;/p&gt;
+&lt;h3 id=&quot;by-counting&quot;&gt;By counting&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-javascript&quot;&gt;&lt;span class=&quot;comment&quot;&gt;// Find duplicate element by counting&lt;/span&gt;
+&lt;span class=&quot;comment&quot;&gt;// O(n) time, O(n) space&lt;/span&gt;
+&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;findDups1&lt;/span&gt;&lt;span class=&quot;params&quot;&gt;(input)&lt;/span&gt; {&lt;/span&gt;
+    &lt;span class=&quot;keyword&quot;&gt;var&lt;/span&gt; count = {};
+    &lt;span class=&quot;keyword&quot;&gt;for&lt;/span&gt;(&lt;span class=&quot;keyword&quot;&gt;var&lt;/span&gt; i=&lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;; i &amp;lt; input.length;i++){
+        &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt;(count[input[i]]){
+            &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; input[i];
+        } &lt;span class=&quot;keyword&quot;&gt;else&lt;/span&gt; {
+            count[input[i]] = &lt;span class=&quot;number&quot;&gt;1&lt;/span&gt;;
+        }
+    }
+    &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;&quot;Not found.&quot;&lt;/span&gt;;
+}
+
+console.log(findDups1([&lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;, &lt;span class=&quot;number&quot;&gt;2&lt;/span&gt;, &lt;span class=&quot;number&quot;&gt;2&lt;/span&gt;, &lt;span class=&quot;number&quot;&gt;1&lt;/span&gt;, &lt;span class=&quot;number&quot;&gt;4&lt;/span&gt;]));
+&lt;span class=&quot;comment&quot;&gt;// output: 2&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Above solution is simple, but it requires O(n) extra space. We can actually do better.&lt;/p&gt;
+&lt;p&gt;Below is &lt;em&gt;a in-place solution&lt;/em&gt;  that uses only O(1) space. The idea is to use the input array itself as the counter by mapping element’s value to the array’s index. That is, for a value v, we swap it to index v.  Similar to previous counter-based solution, when we find a collison, the duplicate element is found.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-javascript&quot;&gt;&lt;span class=&quot;comment&quot;&gt;// find duplicate element by in-place counting&lt;/span&gt;
+&lt;span class=&quot;comment&quot;&gt;// O(n) time, O(1) space&lt;/span&gt;
+&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;findDups2&lt;/span&gt;&lt;span class=&quot;params&quot;&gt;(input)&lt;/span&gt; {&lt;/span&gt;
+    &lt;span class=&quot;keyword&quot;&gt;for&lt;/span&gt;(&lt;span class=&quot;keyword&quot;&gt;var&lt;/span&gt; i=&lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;;i &amp;lt; input.length;i++){
+        &lt;span class=&quot;keyword&quot;&gt;while&lt;/span&gt;(input[i]!=i){
+            &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt;(input[input[i]]==input[i]){
+                &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; input[i];
+            }
+            swap(input, i, input[i]);
+        }
+    }
+}
+
+&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;swap&lt;/span&gt;&lt;span class=&quot;params&quot;&gt;(array, i, j)&lt;/span&gt;{&lt;/span&gt;
+    &lt;span class=&quot;keyword&quot;&gt;var&lt;/span&gt; tmp = array[i];
+    array[i] = array[j];
+    array[j] = tmp;
+}
+
+console.log(findDups2([&lt;span class=&quot;number&quot;&gt;4&lt;/span&gt;, &lt;span class=&quot;number&quot;&gt;2&lt;/span&gt;, &lt;span class=&quot;number&quot;&gt;2&lt;/span&gt;, &lt;span class=&quot;number&quot;&gt;1&lt;/span&gt;, &lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;]));
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Although &lt;code&gt;findDups2&lt;/code&gt; contains two nested loops, its running time is actually O(n). Each element is visited at most three times: once for the iteration(line 3), once for the check(line 5) and once for the swap(line 8).&lt;/p&gt;
+&lt;h3 id=&quot;by-graph-algorithm&quot;&gt;By graph algorithm&lt;/h3&gt;
+&lt;p&gt;If we modifided the quesiton a little bit, we can have a graph algorithm solution. This solution is O(1) space, O(n) time. Also, it doesn’t modify the input array, which can be useful if the input is immutable. However, it comes with a price: we need to restrict that elements’ values range from 0 to 98 (smaller than the maximum index). The reason for this is we need to use the last element as a starting point. Details is explained below.&lt;/p&gt;
+&lt;p&gt;First let’s think of the input array as a directed graph. &lt;code&gt;input[i] = j&lt;/code&gt; represents an edge from node i to node j. Then finding the duplicate element is equivalent to finding the beginning of a cycle. To efficiently find the cycle, we need to start from a node that is not in the circle(To be accurate, we need a node in the tail of that circle). That is why we made that restriction - so that no node is pointing to the last node so it is guaranteed a node in the tail. 
+Below I use the well-known &lt;a href=&quot;http://en.wikipedia.org/wiki/Floyd%27s_cycle-finding_algorithm#Tortoise_and_hare&quot;&gt;Floyd’s cycle finding algorithm&lt;/a&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-javascript&quot;&gt;&lt;span class=&quot;comment&quot;&gt;// find duplicate element using cycle-finding algorithm&lt;/span&gt;
+&lt;span class=&quot;comment&quot;&gt;// Restriction: all elements in input must be smaller &lt;/span&gt;
+&lt;span class=&quot;comment&quot;&gt;// than input.length - 1&lt;/span&gt;
+&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;findDups3&lt;/span&gt;&lt;span class=&quot;params&quot;&gt;(input)&lt;/span&gt; {&lt;/span&gt;
+    &lt;span class=&quot;keyword&quot;&gt;var&lt;/span&gt; fast_runner = input.length - &lt;span class=&quot;number&quot;&gt;1&lt;/span&gt;, 
+        slow_runner = input.length - &lt;span class=&quot;number&quot;&gt;1&lt;/span&gt;;
+    &lt;span class=&quot;keyword&quot;&gt;do&lt;/span&gt; {
+        slow_runner = input[slow_runner];
+        fast_runner = input[input[fast_runner]];
+    } &lt;span class=&quot;keyword&quot;&gt;while&lt;/span&gt;(fast_runner != slow_runner);
+    slow_runner = input.length - &lt;span class=&quot;number&quot;&gt;1&lt;/span&gt;;
+    &lt;span class=&quot;keyword&quot;&gt;do&lt;/span&gt; {
+        slow_runner = input[slow_runner];
+        fast_runner = input[fast_runner];
+    } &lt;span class=&quot;keyword&quot;&gt;while&lt;/span&gt;(fast_runner != slow_runner);
+    console.log(fast_runner);
+}
+findDups3([&lt;span class=&quot;number&quot;&gt;3&lt;/span&gt;, &lt;span class=&quot;number&quot;&gt;2&lt;/span&gt;, &lt;span class=&quot;number&quot;&gt;2&lt;/span&gt;, &lt;span class=&quot;number&quot;&gt;1&lt;/span&gt;, &lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;]);
+&lt;span class=&quot;comment&quot;&gt;// output: 2&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;by-algebra&quot;&gt;By algebra&lt;/h3&gt;
+&lt;p&gt;Lastly a special case of this problem: each possible value appears exactly once except the duplicate one(no value is missing). Then we can calculate the duplicate value from the sum of the array.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-javascript&quot;&gt;&lt;span class=&quot;comment&quot;&gt;// find duplicate element using algebra&lt;/span&gt;
+&lt;span class=&quot;comment&quot;&gt;// Restriction: each possible value appears exactly once &lt;/span&gt;
+&lt;span class=&quot;comment&quot;&gt;// except the duplicate one.&lt;/span&gt;
+&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;findDups4&lt;/span&gt;&lt;span class=&quot;params&quot;&gt;(input)&lt;/span&gt;{&lt;/span&gt;
+    &lt;span class=&quot;keyword&quot;&gt;var&lt;/span&gt; sum1 = input.reduce(&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;params&quot;&gt;(a,b)&lt;/span&gt;{&lt;/span&gt;
+        &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; a+b;
+    });
+    &lt;span class=&quot;keyword&quot;&gt;var&lt;/span&gt; m = input.length - &lt;span class=&quot;number&quot;&gt;2&lt;/span&gt;;
+    &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; sum1 - m*(m+&lt;span class=&quot;number&quot;&gt;1&lt;/span&gt;)/&lt;span class=&quot;number&quot;&gt;2&lt;/span&gt;;
+}
+
+console.log(findDups4([&lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;,&lt;span class=&quot;number&quot;&gt;1&lt;/span&gt;,&lt;span class=&quot;number&quot;&gt;2&lt;/span&gt;,&lt;span class=&quot;number&quot;&gt;2&lt;/span&gt;,&lt;span class=&quot;number&quot;&gt;3&lt;/span&gt;,&lt;span class=&quot;number&quot;&gt;4&lt;/span&gt;]));
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    <item>
+      <title>Generating all permutations of a string</title>
+      <link>http://thecoolwei.com/articles/print_all_permutations_of_a_string/</link>
+      <pubDate>Wed, 01 Oct 2014 15:00:00 -0700</pubDate>
+      <guid isPermaLink="true">http://thecoolwei.com/articles/print_all_permutations_of_a_string/</guid>
+      <author></author>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;Given a string, print all its permutations.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;There is an elegant in-place recursive solution for this problem. The idea is, for the first position, select one character from the string. Then select another character for the second position from remaining characters. Continue util we have selected a character for every position.&lt;/p&gt;
+&lt;p&gt;&lt;span class=&quot;more&quot;&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;First let us simplfy the problem a little bit by assuming there is no duplicate charactors in the input string.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-javascript&quot;&gt;&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;permute1&lt;/span&gt;&lt;span class=&quot;params&quot;&gt;(input, index)&lt;/span&gt;{&lt;/span&gt;
+    &lt;span class=&quot;comment&quot;&gt;// found a permuation&lt;/span&gt;
+    &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; (index == input.length) {
+        &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; console.log(input);
+    }
+    &lt;span class=&quot;keyword&quot;&gt;for&lt;/span&gt;(&lt;span class=&quot;keyword&quot;&gt;var&lt;/span&gt; i = index; i &amp;lt; input.length; i++) {
+        swap(input, index, i);
+        permute1(input, index+&lt;span class=&quot;number&quot;&gt;1&lt;/span&gt;);
+        swap(input, index, i);
+        &lt;span class=&quot;comment&quot;&gt;// input array is restored&lt;/span&gt;
+    }
+}
+
+&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;swap&lt;/span&gt;&lt;span class=&quot;params&quot;&gt;(array, i, j)&lt;/span&gt;{&lt;/span&gt;
+    &lt;span class=&quot;keyword&quot;&gt;var&lt;/span&gt; tmp = array[i];
+    array[i] = array[j];
+    array[j] = tmp;
+}
+
+permute1([&lt;span class=&quot;number&quot;&gt;1&lt;/span&gt;,&lt;span class=&quot;number&quot;&gt;2&lt;/span&gt;,&lt;span class=&quot;number&quot;&gt;3&lt;/span&gt;], &lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Notice that the &lt;code&gt;permute&lt;/code&gt; function doesn’t change the &lt;code&gt;input&lt;/code&gt; array. This can be proved recusively. In the end of the recursive call chain, &lt;code&gt;permute1&lt;/code&gt; simply outputs the result, so &lt;code&gt;input&lt;/code&gt; is not changed. In each outer call, &lt;code&gt;input&lt;/code&gt; is changed in line 7 then restored in line 9.&lt;/p&gt;
+&lt;p&gt;What if the input string contains duplicate characters? We just need to sort the input then skip duplicate characters during selection.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-javascript&quot;&gt;&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;permute2&lt;/span&gt;&lt;span class=&quot;params&quot;&gt;(input)&lt;/span&gt; {&lt;/span&gt;
+    input.sort();
+
+    &lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;permute_recur&lt;/span&gt;&lt;span class=&quot;params&quot;&gt;(input, index)&lt;/span&gt; {&lt;/span&gt;
+        &lt;span class=&quot;comment&quot;&gt;// found a permutation&lt;/span&gt;
+        &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; (index == input.length) {
+            &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; console.log(input);
+        }
+
+        &lt;span class=&quot;keyword&quot;&gt;for&lt;/span&gt;(&lt;span class=&quot;keyword&quot;&gt;var&lt;/span&gt; i = index; i &amp;lt; input.length; i++) {
+            &lt;span class=&quot;comment&quot;&gt;// skip duplicate elements&lt;/span&gt;
+            &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt;(i &amp;gt; index &amp;amp;&amp;amp; input[i]===input[i-&lt;span class=&quot;number&quot;&gt;1&lt;/span&gt;]){
+                &lt;span class=&quot;keyword&quot;&gt;continue&lt;/span&gt;;
+            }
+            swap(input, index, i);
+            permute_recur(input, index+&lt;span class=&quot;number&quot;&gt;1&lt;/span&gt;);
+            swap(input, index, i);
+        }
+    }
+
+    &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; permute_recur(input, &lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;);
+
+}
+
+permute2([&lt;span class=&quot;number&quot;&gt;1&lt;/span&gt;,&lt;span class=&quot;number&quot;&gt;1&lt;/span&gt;,&lt;span class=&quot;number&quot;&gt;2&lt;/span&gt;]);
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+  </channel>
+</rss>
