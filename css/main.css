@@ -14,6 +14,7 @@
 
 body {
   font: normal 100% Merriweather;
+  line-height: 1.8em;
   background-color:#FFFFFF;
   color:#3F454F;
   text-shadow: 0 1px 0 white;
@@ -21,7 +22,7 @@ body {
 } 
 
 .content-wrap {
-  max-width: 70em;
+  max-width: 55em;
   margin: 0 auto;
 }
 
@@ -67,8 +68,12 @@ blockquote > p:first-child:before, blockquote > p:last-child:after {
   padding: 0 -0.2em;
 }
 
+.logo {
+  margin: 1em 0;
+  font-size: 2.7em;
+}
 .logo h1 > a {
-  color: #BE3F1C;
+  /*color: #BE3F1C;*/
   text-decoration: none;
 }
 
@@ -78,11 +83,11 @@ blockquote > p:first-child:before, blockquote > p:last-child:after {
   width: 47%;
 }
 
-.articles  {
+/*.articles  {
   float: right;
   width: 47%;
 }
-
+*/
 article {
   margin-bottom: 2em;
 }
@@ -98,9 +103,20 @@ article {
   color: #888;
 }
 
+header .links {
+  position: relative;
+  top: -5em;
+  float: right;
+}
+
 footer {
   text-align: center;
   font-size: .8em;
+}
+
+footer .nav {
+  font-size: 2em;
+  margin-bottom: 2em;
 }
 
 /*body, a {

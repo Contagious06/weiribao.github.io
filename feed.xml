@@ -4,14 +4,14 @@
     <title>The Cool Wei</title>
     <atom:link href="http://thecoolwei.com/feed.xml" rel="self" type="application/rss+xml"></atom:link>
     <link>http://thecoolwei.com</link>
-    <description>Coding &amp; Music &amp; Life</description>
-    <pubDate>Wed, 01 Oct 2014 15:00:00 -0700</pubDate>
+    <description></description>
+    <pubDate>Sun, 14 Oct 2012 08:31:00 -0700</pubDate>
     <generator>Wintersmith - https://github.com/jnordberg/wintersmith</generator>
     <language>en</language>
     <item>
       <title>Finding duplicate elements in an array</title>
       <link>http://thecoolwei.com/articles/finding-duplicate-elements-in-an-array/</link>
-      <pubDate>Wed, 01 Oct 2014 15:00:00 -0700</pubDate>
+      <pubDate>Sun, 14 Oct 2012 08:31:00 -0700</pubDate>
       <guid isPermaLink="true">http://thecoolwei.com/articles/finding-duplicate-elements-in-an-array/</guid>
       <author></author>
       <description>&lt;blockquote&gt;
@@ -106,7 +106,7 @@ console.log(findDups4([&lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;,&lt;s
     <item>
       <title>Generating all permutations of a string</title>
       <link>http://thecoolwei.com/articles/print_all_permutations_of_a_string/</link>
-      <pubDate>Wed, 01 Oct 2014 15:00:00 -0700</pubDate>
+      <pubDate>Mon, 01 Oct 2012 13:02:00 -0700</pubDate>
       <guid isPermaLink="true">http://thecoolwei.com/articles/print_all_permutations_of_a_string/</guid>
       <author></author>
       <description>&lt;blockquote&gt;
