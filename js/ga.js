@@ -3,5 +3,5 @@
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-  ga('create', 'UA-6455503-4', 'thecoolwei.com');
+  ga('create', 'UA-33544980-1', 'thecoolwei.com');
   ga('send', 'pageview');
