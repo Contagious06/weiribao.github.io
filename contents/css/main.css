@@ -21,6 +21,17 @@ body {
   text-rendering: optimizeLegibility;
 } 
 
+nav {
+  font-size: 1.3em;
+  /*line-height: 2em;*/
+  margin-bottom: 2em;
+}
+
+nav .prompt {
+  font-style: italic;
+  opacity: 0.7;
+}
+
 .content-wrap {
   max-width: 55em;
   margin: 0 auto;
@@ -34,8 +45,12 @@ a:not(:hover) {
   text-decoration: none;
 }
 
-h1, h1 a, h2, h2 a {
+h1, h1 a {
   color: #21BBE1;
+}
+
+h2, h2 a {
+  /*color: #BE3F1C;*/
 }
 
 .article.intro header a {
@@ -79,11 +94,6 @@ blockquote > p:first-child:before, blockquote > p:last-child:after {
   width: 47%;
 }
 
-/*.articles  {
-  float: right;
-  width: 47%;
-}
-*/
 article {
   margin-bottom: 2em;
 }
@@ -99,6 +109,28 @@ article {
   color: #888;
 }
 
+.big-date {
+  font-size: 1.1em;
+  font-style: italic;
+  color: #888;
+  padding-right: 2em;
+}
+
+.big-tag {
+  border-radius: .4em;
+  background-color: #FAFCB4;
+  margin-right: .3em;
+  margin-bottom: .3em;
+  padding: .3em .6em;
+  color: #3F454F;
+  display: inline-block;
+}
+
+a.big-tag:hover {
+  text-decoration: none;
+}
+
+
 footer {
   text-align: center;
   font-size: .8em;
@@ -107,6 +139,10 @@ footer {
 footer .nav {
   font-size: 2em;
   margin-bottom: 2em;
+}
+
+.nav a {
+  margin: 2em;
 }
 
 .header {

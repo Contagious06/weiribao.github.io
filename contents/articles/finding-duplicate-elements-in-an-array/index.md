@@ -2,6 +2,7 @@
 title: Finding duplicate elements in an array
 date: 2012-10-14 8:31
 template: article.jade
+tags: Algorithm
 ---
 
 >We have an array of length 100, which contains numbers ranging from 0 and 99. There is exactly one duplicate number in this array. Write a program to find out this number.
